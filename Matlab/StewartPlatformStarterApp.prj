@@ -1,0 +1,61 @@
+<deployment-project plugin="plugin.apptool" plugin-version="1.0">
+  <configuration build-checksum="1522036774" file="C:\Users\trent\Desktop\Thesis\Matlab\StewartPlatformStarterApp.prj" location="C:\Users\trent\Desktop\Thesis\Matlab" name="StewartPlatformStarterApp" target="target.mlapps" target-name="Package App">
+    <param.appname>StewartPlatformStarterApp</param.appname>
+    <param.authnamewatermark>Trent Peterson</param.authnamewatermark>
+    <param.email>trent.r.peterson@gmail.com</param.email>
+    <param.company />
+    <param.icon />
+    <param.icons />
+    <param.summary>This app interfaces with a 6-DOF Stewart Platform robot controlled by an Arduino Due.</param.summary>
+    <param.description />
+    <param.screenshot>C:\Users\trent\AppData\Local\Temp\tpc9932447_bacb_4b45_a0c4_022ff42df5c1.png</param.screenshot>
+    <param.version>1.0</param.version>
+    <param.products.name />
+    <param.products.id />
+    <param.products.version />
+    <param.platforms />
+    <param.output>C:\Users\trent\Desktop\Thesis\Matlab</param.output>
+    <param.guid>f2a15148-25e8-4dd4-a5f8-9d4281fd9fd8</param.guid>
+    <unset>
+      <param.company />
+      <param.icon />
+      <param.icons />
+      <param.description />
+      <param.version />
+      <param.products.name />
+      <param.products.id />
+      <param.products.version />
+      <param.platforms />
+      <param.output />
+    </unset>
+    <fileset.main>
+      <file>${PROJECT_ROOT}\StewartPlatformStarterApp.mlapp</file>
+    </fileset.main>
+    <fileset.depfun />
+    <fileset.resources />
+    <fileset.package />
+    <build-deliverables>
+      <file location="C:\Users\trent\Desktop\Thesis" name="Matlab" optional="false">C:\Users\trent\Desktop\Thesis\Matlab</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>D:\Program Files\MATLAB\R2018b</root>
+      <toolboxes />
+    </matlab>
+    <platform>
+      <unix>false</unix>
+      <mac>false</mac>
+      <windows>true</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>false</vista>
+      <linux>false</linux>
+      <solaris>false</solaris>
+      <osver>10.0</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>win64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>
