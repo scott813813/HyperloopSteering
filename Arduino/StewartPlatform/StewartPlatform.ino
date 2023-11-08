@@ -198,7 +198,7 @@ inline void readSerialUSB()
   {
     
     stop_array[motor] = 0;  // reset move complete flag
-    desired_pos[motor] = 350;           // YOO CHANGE THIS TO GET SERIAL INPUT FOR POS
+    desired_pos[motor] = input[motor];           // YOO CHANGE THIS TO GET SERIAL INPUT FOR POS
     movestartpos[motor] = pos[motor];
 
     if (abs(movestartpos[motor] - desired_pos[motor]) > deltaMax)
