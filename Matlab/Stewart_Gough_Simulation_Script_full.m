@@ -30,7 +30,7 @@ top_angle = sort(top_angle);                    %sorted for calculation integrit
 % 6-6 Configuration when all joints are spaced 60° (unstable configuration)
 configuration_6_3   = false;                    % Run preset 6-3 configuration simulation
 configuration_6_6   = false;                     % Run preset 6-6 configuration simulation
-animation           = false;                     % Display Animation 
+animation           = true;                     % Display Animation 
 plots               = true;                    % Display Plots
 %Set physical parameters
 stroke_length       = 8;                        %[inches]

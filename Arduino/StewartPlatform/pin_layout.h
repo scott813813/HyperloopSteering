@@ -4,13 +4,14 @@
 
 #pragma once
 
-// PWM pins
+// PWM pins 
 #define PWM_1 13
 #define PWM_2 12
 #define PWM_3 11
 #define PWM_4 10
 #define PWM_5 9
 #define PWM_6 8
+
 // DIRection pins
 #define DIR_1 7 
 #define DIR_2 6
@@ -19,7 +20,7 @@
 #define DIR_5 3
 #define DIR_6 2
 
-// PA-14P Potentiometer pins
+// PA-14P Potentiometer pins, RED wire to POT
 #define POT_1 A0
 #define POT_2 A1
 #define POT_3 A2

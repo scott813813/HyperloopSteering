@@ -1,9 +1,12 @@
-#include <platform.h>
+#include "platform.h"
 
 // Main Arduino code for a 6-dof Stewart platform.
 // Written for the Arduino Due.
 // This code has been taken from the ENPH 459 Engineering Physics group from the University of British Columbia
 // and modified by Trent Peterson to work with the Cal Poly ME 423 Stewart Platform robot and the Stewart Platform Motor Driver PCB hat.
+// Programming Port on modem101
+// Native Port on modem1101
+// Note: Black to M+, and Red to M-
 
 // Actuator variables
 uint8_t pwm[NUM_MOTORS];            // current PWM for each actuator
@@ -19,7 +22,7 @@ uint16_t desired_pos[NUM_MOTORS];   // desired (user-inputted and validated) pos
 uint16_t deltaMax = 0;              // Determine the largest actuator distance to travel for a move
 // Feedback variables
 int16_t pos_diff;                   // difference between current and desired position
-int16_t static_pos_diff;                   // difference between latched and desired position
+int16_t static_pos_diff;            // difference between latched and desired position
 int16_t prop_diff;                  // position difference used for proportional gain
 int16_t previous_diff[NUM_MOTORS];  // last position difference for each actuator; for derivative gain
 //int16_t total_diff[NUM_MOTORS];     // cumulative position difference for each actuator; for integral gain
@@ -55,6 +58,12 @@ void setup()
 {
   while (!SerialUSB);
 
+  SerialUSB.begin(BAUD);
+  delay(2000);
+
+  SerialUSB.print("Test Print PASSED\n");
+
+
   // Initialize pins
   for (motor = 0; motor < NUM_MOTORS; ++motor)
   {
@@ -75,12 +84,14 @@ void setup()
   for (motor = 0; motor < NUM_MOTORS; ++motor)
   {
     //total_diff[motor] = 0;
-    desired_pos[motor] = 0;
+    desired_pos[motor] = 550;
     pwm[motor] = MIN_PWM;
   }
 
   // Initialize SerialUSB communication
-  SerialUSB.begin(BAUD);
+  //SerialUSB.begin(BAUD);
+
+  //SerialUSB.print("Test Print PASSED\n");
 
   // Run calibration
   calibration_valid = true;
@@ -100,7 +111,7 @@ void setup()
 */
 void loop()
 {
-  // Read current actuator positions, map them based on actuator-based scaling from calibration
+  // Read current actuator positions, them based on actuator-based scaling from calibration
   for (motor = 0; motor < NUM_MOTORS; ++motor)
   {
     pos[motor] = map(getAverageReading(motor), ZERO_POS[motor], END_POS[motor], MIN_POS, MAX_POS);
@@ -187,7 +198,7 @@ inline void readSerialUSB()
   {
     
     stop_array[motor] = 0;  // reset move complete flag
-    desired_pos[motor] = input[motor];
+    desired_pos[motor] = 350;           // YOO CHANGE THIS TO GET SERIAL INPUT FOR POS
     movestartpos[motor] = pos[motor];
 
     if (abs(movestartpos[motor] - desired_pos[motor]) > deltaMax)
@@ -231,6 +242,14 @@ inline void printOutput()
       }
 
       SerialUSB.print("\n");
+      SerialUSB.print("      READ POS: ");
+      for (motor = 0; motor < NUM_MOTORS; ++motor)
+      {
+        SerialUSB.print(analogRead(POT_PINS[motor]));
+        SerialUSB.print(" ");
+      }
+      SerialUSB.print("\n");
+
     }
 #endif // PRINT_DESIRED_POS
 
@@ -329,14 +348,14 @@ inline void move(uint8_t motor)
   dir[motor] = (corr > 0) ? RETRACT : EXTEND;  // direction based on the sign of the error
   pwm[motor] = (constrain(abs(corr), MIN_PWM, MAX_PWM)*speedscale)/percentage;  // bound the correction by the PWM limits
 
-  if (pwm[motor] < 30)
+  if (pwm[motor] < 100)
   {
-      pwm[motor]=30;
+      pwm[motor] = 100;
   }
 
   if (stop_array[motor])
   {
-    pwm[motor]=0;
+    pwm[motor] = 0;
   }
   // Move the actuator with the new direction and PWM values
   digitalWrite(DIR_PINS[motor], dir[motor]);
@@ -350,38 +369,52 @@ inline void move(uint8_t motor)
 */
 inline void calibrate()
 {
-  //SerialUSB.print("<COM> Beginning calibration.\n");
-  //delay(500);
+  SerialUSB.print("<COM> Beginning calibration.\n");
+  delay(500);
 
   // Extend all actuators
   for (motor = 0; motor < NUM_MOTORS; ++motor)
   {
     // Start with extension
+    SerialUSB.print("<COM> Extend Motor ");
+    SerialUSB.print(motor+1);
+    SerialUSB.print(".\n");
     digitalWrite(DIR_PINS[motor], EXTEND);
     analogWrite(PWM_PINS[motor], MAX_PWM);
   }
   delay(RESET_DELAY);
 
   // Stop the extension, get averaged analog readings
+  SerialUSB.print("<COM> End Motor Pos: ");
   for (motor = 0; motor < NUM_MOTORS; ++motor)
   {
     analogWrite(PWM_PINS[motor], 0);
     end_readings[motor] = getAverageReading(motor);
+    SerialUSB.print(end_readings[motor]);
 
     // Check if the motors are powered (reading is valid)
     calibration_valid = (abs(end_readings[motor] - END_POS[motor]) < OFF_THRESHOLD);
     if (!calibration_valid)
     {
+      SerialUSB.print("<COM> Motor ");
+      SerialUSB.print(motor);
+      SerialUSB.print(" is off.\n");
       break;
     }
   }
+
   // Retract all actuators
   for (motor = 0; motor < NUM_MOTORS; ++motor)
   {
+    SerialUSB.print("<COM> Retract Motor ");
+    SerialUSB.print(motor+1);
+    SerialUSB.print(".\n");
     digitalWrite(DIR_PINS[motor], RETRACT);
     analogWrite(PWM_PINS[motor], MAX_PWM);
   }
   delay(RESET_DELAY);
+  
+  SerialUSB.print("<COM> Zero Motor Pos: ");
 
   // Stop the retraction, get averaged analog readings
   if (calibration_valid)
@@ -390,6 +423,7 @@ inline void calibrate()
     {
       analogWrite(PWM_PINS[motor], 0);
       zero_readings[motor] = getAverageReading(motor);
+      SerialUSB.print(zero_readings[motor]);
 
       // Check if the motors are powered (reading is valid)
       calibration_valid = (abs(zero_readings[motor] - ZERO_POS[motor]) < OFF_THRESHOLD);
