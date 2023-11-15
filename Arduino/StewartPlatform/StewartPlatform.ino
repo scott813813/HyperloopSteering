@@ -61,7 +61,7 @@ void setup()
   SerialUSB.begin(BAUD);
   delay(2000);
 
-  SerialUSB.print("Test Print PASSED\n");
+  //SerialUSB.print("Test Print PASSED\n");
 
 
   // Initialize pins
@@ -84,12 +84,12 @@ void setup()
   for (motor = 0; motor < NUM_MOTORS; ++motor)
   {
     //total_diff[motor] = 0;
-    desired_pos[motor] = 550;
+    desired_pos[motor] = 50;
     pwm[motor] = MIN_PWM;
   }
 
   // Initialize SerialUSB communication
-  //SerialUSB.begin(BAUD);
+  SerialUSB.begin(BAUD);
 
   //SerialUSB.print("Test Print PASSED\n");
 
@@ -298,7 +298,7 @@ inline void printOutput()
       {
         SerialUSB.print("      DIR        : ");  // align values wih other entries
       }
-#endif // ENABLE_PRINT_HEADERS
+#endif ENABLE_PRINT_HEADERS
 
       for (motor = 0; motor < NUM_MOTORS; ++motor)
       {
@@ -369,28 +369,30 @@ inline void move(uint8_t motor)
 */
 inline void calibrate()
 {
-  SerialUSB.print("<COM> Beginning calibration.\n");
+  //SerialUSB.print("<COM> Beginning calibration.\n");
   delay(500);
 
   // Extend all actuators
   for (motor = 0; motor < NUM_MOTORS; ++motor)
   {
     // Start with extension
+    /*
     SerialUSB.print("<COM> Extend Motor ");
     SerialUSB.print(motor+1);
     SerialUSB.print(".\n");
+    */
     digitalWrite(DIR_PINS[motor], EXTEND);
     analogWrite(PWM_PINS[motor], MAX_PWM);
   }
   delay(RESET_DELAY);
 
   // Stop the extension, get averaged analog readings
-  SerialUSB.print("<COM> End Motor Pos: ");
+  //SerialUSB.print("<COM> End Motor Pos: ");
   for (motor = 0; motor < NUM_MOTORS; ++motor)
   {
     analogWrite(PWM_PINS[motor], 0);
     end_readings[motor] = getAverageReading(motor);
-    SerialUSB.print(end_readings[motor]);
+    //SerialUSB.print(end_readings[motor]);
 
     // Check if the motors are powered (reading is valid)
     calibration_valid = (abs(end_readings[motor] - END_POS[motor]) < OFF_THRESHOLD);
@@ -406,15 +408,17 @@ inline void calibrate()
   // Retract all actuators
   for (motor = 0; motor < NUM_MOTORS; ++motor)
   {
+    /*
     SerialUSB.print("<COM> Retract Motor ");
     SerialUSB.print(motor+1);
     SerialUSB.print(".\n");
+    */
     digitalWrite(DIR_PINS[motor], RETRACT);
     analogWrite(PWM_PINS[motor], MAX_PWM);
   }
   delay(RESET_DELAY);
   
-  SerialUSB.print("<COM> Zero Motor Pos: ");
+  //SerialUSB.print("<COM> Zero Motor Pos: ");
 
   // Stop the retraction, get averaged analog readings
   if (calibration_valid)
@@ -423,7 +427,7 @@ inline void calibrate()
     {
       analogWrite(PWM_PINS[motor], 0);
       zero_readings[motor] = getAverageReading(motor);
-      SerialUSB.print(zero_readings[motor]);
+      //SerialUSB.print(zero_readings[motor]);
 
       // Check if the motors are powered (reading is valid)
       calibration_valid = (abs(zero_readings[motor] - ZERO_POS[motor]) < OFF_THRESHOLD);
@@ -449,19 +453,22 @@ inline void calibrate()
   {
     if (calibration_valid)
     {
-      SerialUSB.print("<COM> Finished calibration:\n");
+      //SerialUSB.print("<COM> Finished calibration:\n");
 
 
       // Print minimum positions
-      SerialUSB.print("      MIN POS: ");
+      //SerialUSB.print("      MIN POS: ");
+      /*
       for (motor = 0; motor < NUM_MOTORS; ++motor)
       {
         SerialUSB.print(ZERO_POS[motor]);
         SerialUSB.print(" ");
       }
-      SerialUSB.print("\n");
+      */
+      //SerialUSB.print("\n");
 
       // Print maximum positions
+      /*
       SerialUSB.print("      MAX POS: ");
       for (motor = 0; motor < NUM_MOTORS; ++motor)
       {
@@ -477,19 +484,20 @@ inline void calibrate()
     else
     {
       // Print an error message for calibration failure
-      SerialUSB.print("<COM> Failed calibration (using default values).\n");
-      SerialUSB.print("      Please verify that the actuators are powered on.\n\r");
+      //SerialUSB.print("<COM> Failed calibration (using default values).\n");
+     //SerialUSB.print("      Please verify that the actuators are powered on.\n\r");
     }
+      */
   }
 #endif // ENABLE_PRINT_HEADERS
 
   if (calibration_valid)
   {
-    SerialUSB.write(1);
+    SerialUSB.write((uint8_t) 49);
   }
   else
   {
-    SerialUSB.write((uint8_t) 0);
+    SerialUSB.write((uint8_t) 48);
   }
 
 }

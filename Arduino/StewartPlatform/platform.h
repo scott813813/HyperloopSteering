@@ -16,7 +16,7 @@
 #define MAX_PWM 255 // 8 bit PWM resolution, default, can be increased to 12 bit if necessary (4095)
 
 // Default platform calibration settings (average analog values at extrema for each actuator)
-#define OFF_THRESHOLD 3000  // ignore calibration if motors aren't powered (i.e. large reading difference from default is found), originally set to 50, change end pos later
+#define OFF_THRESHOLD 100  // ignore calibration if motors aren't powered (i.e. large reading difference from default is found), originally set to 50, change end pos later
 int16_t ZERO_POS[NUM_MOTORS]  = { 989, 987, 989, 990, 989, 990 }; 
 int16_t END_POS[NUM_MOTORS]   = { 707, 699, 697, 698, 696, 696 };
 
@@ -51,7 +51,7 @@ const float D_COEFF[NUM_MOTORS]         = { 0.02, 0.02, 0.02, 0.02, 0.02, 0.02 }
 // Serial print/output parameters
 // NOTE: feedback measurement settings: PRINT_INTERVAL = 10, ENABLE_PRINT_HEADERS = 0, only PRINT_CURRENT_POS
 #define PRINT_INTERVAL          200                 // minimum time (ms) between printing serial info
-#define ENABLE_PRINT            1                  // flag to enable printing variables (for debugging)
+#define ENABLE_PRINT            0                  // flag to enable printing variables (for debugging)
 #define ENABLE_PRINT_HEADERS    ENABLE_PRINT && 1  // flag to enable variable headers (when not running analysis)
 #define PRINT_DESIRED_POS       ENABLE_PRINT && 1  // print desired position values when printing serial info
 #define PRINT_CURRENT_POS       ENABLE_PRINT && 1  // print current position values when printing serial info
