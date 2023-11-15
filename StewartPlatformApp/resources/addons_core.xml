@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addonCore><label>StewartPlatformApp</label><version>1.0</version><type>app</type><packagedBy>(R2018b)</packagedBy><identifier>2a623fd3-727c-4351-84d5-51104c8ca84f</identifier><summary>This app interfaces with a 6-DOF Stewart Platform robot controlled by an Arduino Due.</summary><createdBy name="Trent Peterson" email="trent.r.peterson@gmail.com"/><image>resources/screenshot.png</image><icons><icon tag="0">resources/icon_48.png</icon><icon tag="1">resources/icon_24.png</icon><icon tag="2">resources/icon_16.png</icon></icons></addonCore>
